@@ -1,4 +1,5 @@
 //TEMPLATE PATTERN
+import {PracticeQuizController} from "../Controller/PracticeQuizController.js"
 export class QuizGenerator{
 
     constructor(QuestionFactory, FormBuilder){
@@ -14,8 +15,10 @@ export class QuizGenerator{
 
         const finalQuizHTML = this.selectFormQuestions(objectifiedQuiz)
 
-        this.openWindow(finalQuizHTML)
-
+        const newWindow = this.openWindow(finalQuizHTML)
+        
+        const pracQuizController = new PracticeQuizController(newWindow);
+        pracQuizController.initEventListeners();
     }
 
     parse_questions(){
@@ -46,8 +49,8 @@ export class QuizGenerator{
     createQuizObjects(quizRaw){
         let quizObjects;
         
-        quizObjects = quizRaw.map(q =>
-            this.QuestionFactory.QuestionFactory.create(q.type, q.text, q.options)
+        quizObjects = quizRaw.map((q, i) =>
+            this.QuestionFactory.QuestionFactory.create(i, q.type, q.text, q.options)
         );
         
         return quizObjects;
@@ -65,6 +68,8 @@ export class QuizGenerator{
                 <body>${formHTML}</body>
             </html>
         `);
+        newTab.document.close();
+        return newTab;
     }
 
 }

@@ -3,15 +3,26 @@
     "name": "Canvas Quiz Scraper", 
     "version": "1.0", 
     "permissions": ["scripting", "activeTab"], 
+
+    "background": {
+        "service_worker": "background.bundle.js", 
+        "type": "module"
+    },
+
+    "host_permissions": [
+        "https://generativelanguage.googleapis.com/" 
+    ],
     "action": { "default_popup": "MainMenu.html" }, 
     "content_scripts": [ { "matches": ["<all_urls>"], 
     "js": ["popup.js"], "type": "module" } ], 
+    
     "web_accessible_resources": [ 
         { "resources": [ 
             "classes/FormClasses/*.js", 
             "classes/QuestionClasses/*.js", 
             "classes/QuizClass/*.js",
-            "classes/Controller/*.js"
+            "classes/Controller/*.js",
+            "classes/aiClass/*.js"
         ], 
         "matches": ["<all_urls>"] } 
     ] 
