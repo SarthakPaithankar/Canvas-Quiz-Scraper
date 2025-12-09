@@ -1,8 +1,23 @@
+// SINGLETON PATTERN
 import { GoogleGenAI } from "@google/genai";
+
 export class GeminiService {
+    static instance = null;
+
     constructor(apiKey) {
-        this.ai = new GoogleGenAI({ apiKey: apiKey });
+        if (GeminiService.instance) {
+            return GeminiService.instance;
+        }
+        this.ai = new GoogleGenAI({ apiKey });
         this.modelName = "gemini-2.5-flash";
+        GeminiService.instance = this;
+    }
+
+    static getInstance(apiKey) {
+        if (!GeminiService.instance) {
+            GeminiService.instance = new GeminiService(apiKey);
+        }
+        return GeminiService.instance;
     }
 
     async handleGeminiQuery(prompt) {

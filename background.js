@@ -4,7 +4,7 @@ import { GeminiService } from "./classes/aiClass/gemini";
 const GEMINI_API_KEY = "xxxx"; 
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    const ai = new GeminiService(GEMINI_API_KEY)
+    const ai = GeminiService.getInstance(GEMINI_API_KEY);
     if (request.action === 'askAI') {
         const isAsync = true;
 
