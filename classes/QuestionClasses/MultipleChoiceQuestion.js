@@ -17,7 +17,7 @@ export class MultipleChoiceQuestion extends Question {
               <label><input type="checkbox" name="${this.text}" value="${o}">${o}</label><br>
             `).join("")}
           </div>
-          <button type="button" class="ask-ai-button" data-question-id=${this.questionID}>Ask AI</button>
+          ${this.images ? "" : `<button type="button" class="ask-ai-button" data-question-id="${this.questionID}">Ask AI</button>` }
         </div>
       `;
     }

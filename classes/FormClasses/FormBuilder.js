@@ -1,14 +1,14 @@
 //BUILDER PATTERN
 export class FormBuilder {
-    constructor() {
-      this.html = `<form id="myForm">`;
-    }
-  
-    addQuestion(question) {
-      this.html += question.render();
-    }
-  
-    build() {
-      return this.html + `<button>Submit</button></form>`;
-    }
+  constructor() {
+    this.html = `<form id="myForm">`;
+  }
+
+  addQuestion(question) {
+    this.html += question.render();
+  }
+
+  build() {
+    return this.html + `<a href="path_to_file" download="proposed_file_name">Download</a></form>`;
+  }
 }
