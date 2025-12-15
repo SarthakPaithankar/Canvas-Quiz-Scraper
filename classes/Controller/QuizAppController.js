@@ -10,10 +10,16 @@ export class QuizAppController {
         document.getElementById("run").addEventListener("click", () => this.handleGenerateQuiz('all'));
         document.getElementById("runMcq").addEventListener("click", () => this.handleGenerateQuiz('mcq'));
         document.getElementById("runText").addEventListener("click", () => this.handleGenerateQuiz('text'));
+        document.getElementById("addKey").addEventListener("click", () => this.handleAddingKey());
     }
 
-    async handleGenerateQuiz(quizType) {
+    async getTabId() {
         let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        return tab;
+    }
+
+    async handleGenerateQuiz(quizType){
+        let tab = await this.getTabId();
         
         const quizRegex = /https:\/\/canvas.*\.edu\/courses\/\d+\/quizzes\/\d+/;
 
@@ -38,16 +44,31 @@ export class QuizAppController {
                 
                 if(type === "mcq"){
                     generatorClass = McqGeneratorImport.McqGenerator; 
-                } else if(type === "text"){
+                }else if(type === "text"){
                     generatorClass = WrittenGeneratorImport.TextGenerator;
-                }else { 
+                }else{ 
                     generatorClass = FullQuizGeneratorImport.FullQuizGenerator;
                 }
                 
                 const generator = new generatorClass(QuestionFactoryModule, builderInstance);
-                generator.generateQuiz();
-                
+                generator.generateQuiz();  
             }
         });
+    }
+
+    async handleAddingKey(){
+        const tab = await this.getTabId();
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id},
+            func: async() => {
+                const KeycontrollerModule = await import(chrome.runtime.getURL("classes/Controller/KeyController.js"));
+                const geminiPage = await import(chrome.runtime.getURL("classes/aiClass/GeminiKeyPage.js"));
+                const KeycontrollerObject = new KeycontrollerModule.KeyController();
+                const geminiPageObject = new geminiPage.GeminiKeyPage(KeycontrollerObject);
+                
+                geminiPageObject.createPage(KeycontrollerObject);
+                console.log("listeners are set");
+            }
+        })
     }
 }

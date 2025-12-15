@@ -28,7 +28,6 @@ export class GeminiService {
             });
             return response.text;
         } catch (error) {
-            console.error("Gemini Background API Error:", error);
             return `Error: ${error.message}`;
         }
     }
