@@ -2,7 +2,7 @@
     "manifest_version": 3, 
     "name": "Canvas Quiz Scraper", 
     "version": "1.0", 
-    "permissions": ["scripting", "activeTab"], 
+    "permissions": ["scripting", "activeTab", "storage"], 
 
     "background": {
         "service_worker": "background.bundle.js", 
@@ -10,7 +10,8 @@
     },
 
     "host_permissions": [
-        "https://generativelanguage.googleapis.com/" 
+        "https://generativelanguage.googleapis.com/",
+        "https://*.canvas.edu/*" 
     ],
     "action": { "default_popup": "MainMenu.html" }, 
     "content_scripts": [ { "matches": ["<all_urls>"], 
@@ -27,3 +28,4 @@
         "matches": ["<all_urls>"] } 
     ] 
 }
+

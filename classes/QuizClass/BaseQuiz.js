@@ -31,7 +31,8 @@ export class QuizGenerator{
             const isEssay = question.classList.contains("essay_question");
             const isMatching = question.classList.contains("matching_question");
             const answersEl = question.querySelector(".answers");
-
+            const images = question.querySelector(".question_text.user_content.enhanced img");
+            const img_src = images ? images.src : null;
             let options = [];
 
             if (!isEssay && answersEl) {
@@ -39,9 +40,8 @@ export class QuizGenerator{
                 options = answersEl.innerText.trim().split("\n");
             }
             if (isEssay) type = "text";
-            if (isMatching) type = "matching";
-
-            return { type, text, options };
+            if (isMatching) type = "matching"
+            return { type, text, options, img_src};
         });
         return quizRaw
     }
@@ -50,7 +50,7 @@ export class QuizGenerator{
         let quizObjects;
         
         quizObjects = quizRaw.map((q, i) =>
-            this.QuestionFactory.QuestionFactory.create(i, q.type, q.text, q.options)
+            this.QuestionFactory.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src)
         );
         
         return quizObjects;

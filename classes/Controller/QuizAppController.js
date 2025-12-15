@@ -65,9 +65,7 @@ export class QuizAppController {
                 const geminiPage = await import(chrome.runtime.getURL("classes/aiClass/GeminiKeyPage.js"));
                 const KeycontrollerObject = new KeycontrollerModule.KeyController();
                 const geminiPageObject = new geminiPage.GeminiKeyPage(KeycontrollerObject);
-                
                 geminiPageObject.createPage(KeycontrollerObject);
-                console.log("listeners are set");
             }
         })
     }

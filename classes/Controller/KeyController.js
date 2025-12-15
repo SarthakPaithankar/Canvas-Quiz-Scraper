@@ -19,7 +19,13 @@ export class KeyController{
         chrome.runtime.sendMessage({
             type: "SAVE_GEMINI_KEY",
             apiKey: key
+        }, (response) => {
+            if(response.status == "Success"){
+                geminiWindow.alert("Success! You can close the window now");
+            }else{
+                geminiWindow.alert("Failed to save the API Key");
+            }
         });
-        console.log("sentKey");
+
     }
 }
