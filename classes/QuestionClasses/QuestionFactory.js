@@ -4,7 +4,7 @@ import { TextQuestion } from "./TextQuestion.js"
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion.js"
 
 export class QuestionFactory {
-    static create(i, type, text, options, images) {
+    create(i, type, text, options, images) {
         switch(type){
             case "text":
                 return new TextQuestion(text)

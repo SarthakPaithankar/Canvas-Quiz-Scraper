@@ -1,6 +1,10 @@
 import { askAICommand } from "../aiClass/AITextCommand.js"
 import { inteligenceInvoker } from "../aiClass/InteligenceInvoker.js";
 import { QuizGenerator } from "../QuizClass/BaseQuiz.js"
+// import { QuestionFactory } from "../QuestionClasses/QuestionFactory.js";
+// import { FormBuilder } from "../FormClasses/FormBuilder.js";
+// import { AIQuizGenerator } from "../QuizClass/AIGeneratedQuiz.js";
+
 export class PracticeQuizController {
 
     constructor(quizWindow) {
@@ -64,13 +68,18 @@ export class PracticeQuizController {
         const questionText = JSON.stringify(questions);
 
         const prompt = `You are a rigorous educational assistant specializing in generating high-quality, conceptual quiz questions. 
-                Your ONLY output MUST be a JSON object, and you must return nothing else.
+                Generate a quiz based on the following material. Adhere strictly to the provided response schema.
                 Here are each of the questions ${questionText}. make them another quiz to help them prepare. The Number as
-                Make sure these questions help them gain a DEEPER understanding of the subject. CONSTRAINTS: 1. Generate exactly FIVE (5) questions. 
+                Make sure these questions help them gain a DEEPER understanding of the subject. CONSTRAINTS: 1. Generate exactly 1 question. 
                 2. The Questions can either be MCQ or a short answer. 3. Every question must have one (1) correct answer and a brief, 
                 1-2 sentence explanation of the correct answer.`
          
         const response = await this.askAI(action, prompt);
+
+        // const questionFactory = new QuestionFactory();
+        // const formBuilder = new FormBuilder();
+
+        // const aIQuizGenerator = new AIQuizGenerator(questionFactory, formBuilder, response);
 
         console.log(response);
     }

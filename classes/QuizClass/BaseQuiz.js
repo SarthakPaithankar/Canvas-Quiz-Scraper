@@ -47,22 +47,11 @@ export class QuizGenerator{
         return quizRaw
     }
 
-    static parseJsonQuestions(json_obj){
-        let options = [];
-        if("options" in json_obj){
-            Object.values(json_obj.options).forEach(value => {
-                options.push(value);
-            });
-        }
-        // const img = 
-        return { type: json_obj.question_type, text: json_obj.question_type, options: options, img_src:null };
-    }
-
     createQuizObjects(quizRaw){
         let quizObjects;
-        quizObjects = quizRaw.map((q, i) =>
-            this.QuestionFactory.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src)
-        );
+        quizObjects = quizRaw.map((q, i) => {
+            return this.QuestionFactory.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src);
+        });
         return quizObjects;
     }
 
@@ -71,6 +60,7 @@ export class QuizGenerator{
     }
 
     openWindow(formHTML){
+        console.log(formHTML);
         const newTab = window.open("", "_blank");
         newTab.document.write(`
             <html>
