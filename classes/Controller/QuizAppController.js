@@ -41,6 +41,7 @@ export class QuizAppController {
                 let generatorClass;
                 
                 const builderInstance = new FormBuilderModule.FormBuilder();
+                const factoryInstance = new QuestionFactoryModule.QuestionFactory();
                 
                 if(type === "mcq"){
                     generatorClass = McqGeneratorImport.McqGenerator; 
@@ -50,7 +51,7 @@ export class QuizAppController {
                     generatorClass = FullQuizGeneratorImport.FullQuizGenerator;
                 }
                 
-                const generator = new generatorClass(QuestionFactoryModule, builderInstance);
+                const generator = new generatorClass(factoryInstance, builderInstance);
                 generator.generateQuiz();  
             }
         });

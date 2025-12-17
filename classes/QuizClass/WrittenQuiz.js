@@ -9,7 +9,7 @@ export class TextGenerator extends QuizGenerator {
                 }
             }
         )
-        const formHTML = this.builder.build();
+        const formHTML = this.builder.addSimilarQuizButton().build();
         return formHTML;
     };
 }
