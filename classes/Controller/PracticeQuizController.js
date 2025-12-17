@@ -1,4 +1,7 @@
-export class PracticeQuizController{
+import { askAICommand } from "../aiClass/AITextCommand.js"
+import { inteligenceInvoker } from "../aiClass/InteligenceInvoker.js";
+import { QuizGenerator } from "../QuizClass/BaseQuiz.js"
+export class PracticeQuizController {
 
     constructor(quizWindow) {
         this.quizWindow = quizWindow;
@@ -9,53 +12,67 @@ export class PracticeQuizController{
 
         quizBody.addEventListener('click', (event) => {
             if (event.target.classList.contains('ask-ai-button')) {
-                this.handleAI(event.target);
+                this.getAIHint(event.target);
             }
         });
+
+        quizBody.addEventListener('click', (event) => {
+            if (event.target.classList.contains("similar_quiz")) {
+                this.createNewQuiz(quizBody);
+            }
+        })
     }
 
-    async handleAI(element){
+    async askAI(action, prompt) {
+        const AICommand = new askAICommand(prompt, action);
+        const Invoker = new inteligenceInvoker();
+        const response = await Invoker.runCommand(AICommand);
+        return response;
+    }
+
+    async getAIHint(element) {
+        const action = "askAIText";
         const questionId = element.dataset.questionId;
         const questionContainer = this.quizWindow.document.getElementById(questionId);
-        
         const questionText = questionContainer.querySelector(".questionText").textContent;
         const optionsText = questionContainer.querySelector(".options").textContent;
 
-        var aiDiv = this.createDiv(questionContainer);
+        var aiDiv = QuizGenerator.createDiv(questionContainer, this.quizWindow);
 
         const prompt = `Please answer this multiple choice question based on the provided Question ${questionText}. 
-                        and options ${optionsText}. Multiple answers may be correct.`;
-        this.sendMessage(prompt, aiDiv)
+                and options ${optionsText}. Multiple answers may be correct.`;
+        
+        
+        const response = await this.askAI(action, prompt);
+
+        QuizGenerator.formatMessage(response, aiDiv)
     }
 
-    createDiv(questionContainer){
-        let aiDiv = questionContainer.querySelector('.ai-response-box');
-        if(!aiDiv){
-            aiDiv = this.quizWindow.document.createElement('div');
-            aiDiv.className = 'ai-response-box';
-            questionContainer.appendChild(aiDiv);
-        }
-        aiDiv.innerHTML = "<strong>AI is thinking</strong>";
-        return aiDiv;
-    }
-
-    async sendMessage(prompt, aiDiv){
-        try{
-            const response = await chrome.runtime.sendMessage({
-                action: 'askAI', 
-                prompt: prompt
-            });
-
-            if(response.success){
-                const formattedResult = response.result.replace(/\n/g, '<br>');
-                aiDiv.innerHTML = `<strong>AI Hint:</strong><br>${formattedResult}`;
-            }else{
-                aiDiv.innerHTML = `<strong>Error: ${response.error}</strong>`;
+    async createNewQuiz(quizBody) {
+        console.log(quizBody)
+        const action = "askAIJson";
+        const elements = quizBody.querySelectorAll(`.question`);
+        let questions = [];
+        let options = [];
+        elements.forEach((element, i) => {
+            const questionTextEl = element.querySelector(".questionText");
+            if (questionTextEl) {
+                const text = questionTextEl.textContent;
+                questions.push((i, text));
             }
+        })
+        const questionText = JSON.stringify(questions);
 
-        }catch (error) {
-            console.error(error);
-            if (aiDiv) aiDiv.innerHTML = `<strong>Could not connect to AI service.</strong>`;
-        }
+        const prompt = `You are a rigorous educational assistant specializing in generating high-quality, conceptual quiz questions. 
+                Your ONLY output MUST be a JSON object, and you must return nothing else.
+                Here are each of the questions ${questionText}. make them another quiz to help them prepare. The Number as
+                Make sure these questions help them gain a DEEPER understanding of the subject. CONSTRAINTS: 1. Generate exactly FIVE (5) questions. 
+                2. The Questions can either be MCQ or a short answer. 3. Every question must have one (1) correct answer and a brief, 
+                1-2 sentence explanation of the correct answer.`
+         
+        const response = await this.askAI(action, prompt);
+
+        console.log(response);
     }
 }
+

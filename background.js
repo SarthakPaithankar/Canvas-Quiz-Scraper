@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 
-    if(request.action === 'askAI'){
+    if(request.action === 'askAIText'){
         chrome.storage.local.get("geminiApiKey", async ({ geminiApiKey }) => {
             if(!geminiApiKey){
                 sendResponse({ success: false, error: "No API Key found." });
@@ -23,7 +23,25 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
             try{
                 const ai = GeminiService.getInstance(geminiApiKey);
-                const response = await ai.handleGeminiQuery(request.prompt);
+                const response = await ai.handleGeminiTextQuery(request.prompt);
+                sendResponse({ success: true, result: response });
+            }catch (error){
+                sendResponse({ success: false, error: error.message });
+            }
+        });
+        return true;
+    }
+
+    if(request.action === 'askAIJson'){
+        console.log("trying to get json");
+        chrome.storage.local.get("geminiApiKey", async ({ geminiApiKey }) => {
+            if(!geminiApiKey){
+                sendResponse({ success: false, error: "No API Key found." });
+                return;
+            }
+            try{
+                const ai = GeminiService.getInstance(geminiApiKey);
+                const response = await ai.handleGeminiJsonQuery(request.prompt);
                 sendResponse({ success: true, result: response });
             }catch (error){
                 sendResponse({ success: false, error: error.message });

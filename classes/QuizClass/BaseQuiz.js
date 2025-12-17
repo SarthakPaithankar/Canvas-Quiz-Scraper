@@ -71,4 +71,28 @@ export class QuizGenerator{
         return newTab;
     }
 
+    static createDiv(questionContainer, quizWindow){
+        let aiDiv = questionContainer.querySelector('.ai-response-box');
+        if(!aiDiv){
+            aiDiv = quizWindow.document.createElement('div');
+            aiDiv.className = 'ai-response-box';
+            questionContainer.appendChild(aiDiv);
+        }
+        aiDiv.innerHTML = "<strong>AI is thinking</strong>";
+        return aiDiv;
+    }
+
+    static formatMessage(response, aiDiv){
+        if(response.success){
+            const formattedResult = response.result.replace(/\n/g, '<br>');
+            aiDiv.innerHTML = `<strong>AI Hint:</strong><br>${formattedResult}`;
+            return;
+        }
+        if(response.error){
+            aiDiv.innerHTML = `<strong>Error: ${response.error}</strong>`;
+        }else{
+            if (aiDiv) aiDiv.innerHTML = `<strong>Could not connect to AI service.</strong>`;
+        }
+    }
+
 }
