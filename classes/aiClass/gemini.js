@@ -36,26 +36,32 @@ export class GeminiService {
     }
 
     async handleGeminiJsonQuery(prompt){
-        const quizSchema = z.object({
-            question: z.array(z.object({
-                qtext: z.string().describe("Text of question"),
-                opts: z.array(z.string()).nullable().describe("List of options. Null if type is saq"),
-                ans: z.array().describe("index of correct Answer if MCQ, text for SAQ"),
-                type: z.enum(["mcq", "saq"]),
-                expl: z.string().describe("1-2 sentence pedagogical explanation.")
-            }))
-        });
+        const quizSchema = z.array(z.object({
+            qtext: z.string().describe("Text of question"),
+            opts: z.array(z.string()).nullable().describe("List of options. Null if type is saq"),
+            ans: z.array(z.union([z.string(), z.number()])).describe("Array containing indices or answer text"),
+            type: z.enum(["mcq", "saq"]),
+            expl: z.string().describe("1-2 sentence explanation.")
+        }));
         try{
             const response = await this.ai.models.generateContent({
                 model: "gemini-2.5-flash",
                 contents: prompt,
                 config: {
-                  responseMimeType: "application/json",
-                  responseJsonSchema: zodToJsonSchema(quizSchema),
+                    responseMimeType: "application/json",
+                    responseJsonSchema: zodToJsonSchema(quizSchema),
                 },
             });
-            return response.text;
+            // console.log(response);
+            // const responseText = quizSchema.parse(JSON.parse(response.text));
+            // console.log(responseText);
+            return response;
         }catch(error){
+            if (error instanceof z.ZodError) {
+                console.error("Zod Validation Error Details:", error);
+            } else {
+                console.error("Gemini/Execution Error:", error);
+            }
             return `Error: ${error}$`;
         }
     }

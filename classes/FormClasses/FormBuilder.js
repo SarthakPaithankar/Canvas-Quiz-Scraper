@@ -10,16 +10,14 @@ export class FormBuilder {
   }
 
   addSimilarQuizButton(){
-    const blob = new Blob([this.html], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    this.html += `
-      <a href="${url}" download="quiz_export.html">Download File</a>
-      <button type="button" class="similar_quiz">Make a Similar Quiz</button>
-    `;
+    this.html += `<button type="button" class="similar_quiz">Make a Similar Quiz</button>`;
     return this;
   }
 
   build() {
-    return this.html + `</form>`;
+    return this.html + `
+        <a href="path_to_file" download="proposed_file_name">Download</a>
+      </form>
+    `;
   }
 }
