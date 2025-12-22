@@ -47,16 +47,18 @@ export class QuizGenerator{
         return quizRaw
     }
 
-    static parseJsonQuestions(json_obj){
-        let options = [];
-        if("options" in json_obj){
-            Object.values(json_obj.options).forEach(value => {
-                options.push(value);
-            });
-        }
-        // const img = 
-        return { type: json_obj.question_type, text: json_obj.question_type, options: options, img_src:null };
-    }
+    // static parseJsonQuestions(json_obj){
+    //     const quizRaw = json_obj.map(question => {
+    //         let options = [];
+    //         if("opts" in question){
+    //             Object.values(question.opts).forEach(value => {
+    //                 options.push(value);
+    //             });
+    //         }
+    //         return { type: question.type, text: question.q_text, options: options, img_src:null, ans: question.expl };
+    //     });
+    //     return quizRaw;
+    // }
 
     createQuizObjects(quizRaw){
         let quizObjects;

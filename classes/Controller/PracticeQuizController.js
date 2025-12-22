@@ -1,8 +1,11 @@
 import { askAICommand } from "../aiClass/AITextCommand.js"
 import { inteligenceInvoker } from "../aiClass/InteligenceInvoker.js";
 import { QuizGenerator } from "../QuizClass/BaseQuiz.js"
-export class PracticeQuizController {
+import { AIQuizGenerator } from "../QuizClass/AIGeneratedQuiz.js";
+// import { QuestionFactory as qfact } from "../QuestionClasses/QuestionFactory.js";
+// import { FormBuilder } from "../FormClasses/FormBuilder.js";
 
+export class PracticeQuizController {
     constructor(quizWindow) {
         this.quizWindow = quizWindow;
     }
@@ -49,7 +52,6 @@ export class PracticeQuizController {
     }
 
     async createNewQuiz(quizBody) {
-        console.log(quizBody)
         const action = "askAIJson";
         const elements = quizBody.querySelectorAll(`.question`);
         let questions = [];
@@ -66,13 +68,19 @@ export class PracticeQuizController {
         const prompt = `You are a rigorous educational assistant specializing in generating high-quality, conceptual quiz questions. 
                 Your ONLY output MUST be a JSON object, and you must return nothing else.
                 Here are each of the questions ${questionText}. make them another quiz to help them prepare. The Number as
-                Make sure these questions help them gain a DEEPER understanding of the subject. CONSTRAINTS: 1. Generate exactly FIVE (5) questions. 
-                2. The Questions can either be MCQ or a short answer. 3. Every question must have one (1) correct answer and a brief, 
-                1-2 sentence explanation of the correct answer.`
+                Make sure these questions help them gain a DEEPER understanding of the subject. CONSTRAINTS: 1. Generate exactly 2 question. 
+                2. The Questions can either be MCQ or a short answer. 3. The JSON Keys should be names as follows: question, q_text, opts, ans, type, expl.
+            `
          
         const response = await this.askAI(action, prompt);
 
-        console.log(response);
+        // const extracted_json = response.candidates[0].content.parts[0].text;
+
+        // const json_obj = JSON.parse(extracted_json);
+        // const builder = new FormBuilder();
+        // const generator = new AIQuizGenerator(qfact, builder, json_obj);
+        // generator.generateQuiz();  
+
     }
 }
 

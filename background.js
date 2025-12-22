@@ -44,6 +44,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 const response = await ai.handleGeminiJsonQuery(request.prompt);
                 sendResponse({ success: true, result: response });
             }catch (error){
+                console.log(h2);
                 sendResponse({ success: false, error: error.message });
             }
         });

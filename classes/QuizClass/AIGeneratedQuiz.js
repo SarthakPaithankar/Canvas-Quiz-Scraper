@@ -7,29 +7,25 @@ export class AIQuizGenerator extends QuizGenerator{
         this.json_obj = json_obj;
     }
 
+    
     parse_questions(){
-        let options = [];
-        let type;
-        let text;
-        let img_src;
-        try{
-            type = this.json_obj.question_type;
-            text = this.json_obj.question_text;
-            img_src = null;
-            if("options" in this.json_obj){
-                Object.values(this.json_obj.options).forEach(value => {
+        const quizRaw = this.json_obj.map(question => {
+            let options = [];
+            if("opts" in question){
+                Object.values(question.opts).forEach(value => {
                     options.push(value);
                 });
             }
-        }catch (error){
-            console.log(`Error: ${error}`);
-        }
-        
-        return [{ type, text, options, img_src }];
+            return { type: question.type, text: question.q_text, options: options, img_src:null, ans: question.expl };
+        });
+        return quizRaw;
     }
+    
 
     createQuizObjects(quizRaw){
         let quizObjects;
+        console.log(typeof(this.QuestionFactory));
+        console.log(typeof(this.builder));
         quizObjects = quizRaw.map((q, i) => {
             return this.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src);
         });
