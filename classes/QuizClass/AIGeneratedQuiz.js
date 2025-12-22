@@ -3,10 +3,8 @@ import { QuizGenerator } from "./BaseQuiz.js";
 export class AIQuizGenerator extends QuizGenerator{
 
     constructor(questionFactory, formBuilder, json_obj){
-        console.log("Passed in Child:", questionFactory);
         super(questionFactory, formBuilder);
         this.json_obj = json_obj;
-        console.log("Factory in Child:", this.QuestionFactory);
     }
 
     parse_questions(){
@@ -32,7 +30,6 @@ export class AIQuizGenerator extends QuizGenerator{
 
     createQuizObjects(quizRaw){
         let quizObjects;
-        console.log("q", this.QuestionFactory);
         quizObjects = quizRaw.map((q, i) => {
             return this.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src);
         });
@@ -41,6 +38,7 @@ export class AIQuizGenerator extends QuizGenerator{
 
     selectFormQuestions(quizObjects){
         quizObjects.forEach(q => this.builder.addQuestion(q));
+        // const quizHtml = this.builder.build();
         const quizHtml = this.builder.addSimilarQuizButton().build();
         return quizHtml;
     }
