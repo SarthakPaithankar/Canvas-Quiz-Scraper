@@ -40,7 +40,12 @@ export class GeminiService {
             qtext: z.string().describe("Text of question"),
             opts: z.array(z.string()).nullable().describe("List of options. Null if type is saq"),
             ans: z.array(z.union([z.string(), z.number()])).describe("Array containing indices or answer text"),
-            type: z.enum(["mcq", "saq"]),
+            type: z.preprocess((val) => {
+                const lowCaseVal = val.toLowerCase();
+                if(lowCaseVal.includes("short") || lowCaseVal.includes("saq")) return "text";
+                if(lowCaseVal.includes("multiple") ||  lowCaseVal.includes("mcq")) return "mcq";
+                return lowCaseVal;
+            }, z.enum(["mcq", "saq"])),
             expl: z.string().describe("1-2 sentence explanation.")
         }));
         try{
@@ -52,9 +57,6 @@ export class GeminiService {
                     responseJsonSchema: zodToJsonSchema(quizSchema),
                 },
             });
-            // console.log(response);
-            // const responseText = quizSchema.parse(JSON.parse(response.text));
-            // console.log(responseText);
             return response;
         }catch(error){
             if (error instanceof z.ZodError) {
