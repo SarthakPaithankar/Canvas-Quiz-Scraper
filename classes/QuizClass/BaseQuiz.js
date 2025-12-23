@@ -48,19 +48,6 @@ export class QuizGenerator{
         return quizRaw
     }
 
-    // static parseJsonQuestions(json_obj){
-    //     const quizRaw = json_obj.map(question => {
-    //         let options = [];
-    //         if("opts" in question){
-    //             Object.values(question.opts).forEach(value => {
-    //                 options.push(value);
-    //             });
-    //         }
-    //         return { type: question.type, text: question.q_text, options: options, img_src:null, ans: question.expl };
-    //     });
-    //     return quizRaw;
-    // }
-
     createQuizObjects(quizRaw){
         let quizObjects;
         quizObjects = quizRaw.map((q, i) =>
@@ -108,5 +95,4 @@ export class QuizGenerator{
             if (aiDiv) aiDiv.innerHTML = `<strong>Could not connect to AI service.</strong>`;
         }
     }
-
 }
