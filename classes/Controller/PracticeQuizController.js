@@ -1,9 +1,8 @@
 import { askAICommand } from "../aiClass/AITextCommand.js"
 import { inteligenceInvoker } from "../aiClass/InteligenceInvoker.js";
 import { QuizGenerator } from "../QuizClass/BaseQuiz.js"
-import { AIQuizGenerator } from "../QuizClass/AIGeneratedQuiz.js";
-// import { QuestionFactory as qfact } from "../QuestionClasses/QuestionFactory.js";
-// import { FormBuilder } from "../FormClasses/FormBuilder.js";
+import { QuestionFactory as qfact } from "../QuestionClasses/QuestionFactory.js";
+import { FormBuilder } from "../FormClasses/FormBuilder.js";
 
 export class PracticeQuizController {
     constructor(quizWindow) {
@@ -52,10 +51,11 @@ export class PracticeQuizController {
     }
 
     async createNewQuiz(quizBody) {
-        const action = "askAIJson";
+        const { AIQuizGenerator } = await import("../QuizClass/AIGeneratedQuiz.js");
+        const action = "askAIText";
         const elements = quizBody.querySelectorAll(`.question`);
         let questions = [];
-        let options = [];
+        
         elements.forEach((element, i) => {
             const questionTextEl = element.querySelector(".questionText");
             if (questionTextEl) {
@@ -65,22 +65,36 @@ export class PracticeQuizController {
         })
         const questionText = JSON.stringify(questions);
 
-        const prompt = `You are a rigorous educational assistant specializing in generating high-quality, conceptual quiz questions. 
-                Your ONLY output MUST be a JSON object, and you must return nothing else.
-                Here are each of the questions ${questionText}. make them another quiz to help them prepare. The Number as
-                Make sure these questions help them gain a DEEPER understanding of the subject. CONSTRAINTS: 1. Generate exactly 2 question. 
-                2. The Questions can either be MCQ or a short answer. 3. The JSON Keys should be names as follows: question, q_text, opts, ans, type, expl.
+        const prompt = `
+            You are a rigorous educational assistant specializing in generating high-quality, conceptual quiz questions. 
+            TASK:
+            Generate exactly 2 questions based on the following text: ${questionText}. 
+            The questions must promote a DEEPER understanding by focusing on the application and analysis of the concepts. Avoid simple recall.
+
+            CONSTRAINTS:
+            1. Format: Exactly 2 questions.
+            2. Type: Can be MCQ (Multiple Choice) or short answer.
+            3. JSON Schema: You MUST return a JSON object with this exact structure:
+            {
+                "quiz": [
+                {
+                    "q_text": "string",
+                    "opts": ["option A", "option B", "option C", "option D"],
+                    "ans": "string",
+                    "type": "mcq" | "text",
+                    "expl": "string"
+                }
+                ]
+            }
+            4. For "short_answer", set "opts" to null.
+            5. For "mcq", ensure distractors (wrong answers) represent common student misconceptions.
+            6. OUTPUT: Return ONLY the JSON object. No markdown blocks, no preamble, no postamble.
             `
          
         const response = await this.askAI(action, prompt);
-
-        // const extracted_json = response.candidates[0].content.parts[0].text;
-
-        // const json_obj = JSON.parse(extracted_json);
-        // const builder = new FormBuilder();
-        // const generator = new AIQuizGenerator(qfact, builder, json_obj);
-        // generator.generateQuiz();  
-
+        
+        const builder = new FormBuilder();
+        const generator = new AIQuizGenerator(qfact, builder, response);
+        generator.generateQuiz();  
     }
 }
-

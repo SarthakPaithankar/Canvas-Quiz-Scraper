@@ -9,6 +9,10 @@ export class FormBuilder {
     return this;
   }
 
+  addAskAIButton(){
+    
+  }
+
   addSimilarQuizButton(){
     this.html += `<button type="button" class="similar_quiz">Make a Similar Quiz</button>`;
     return this;
