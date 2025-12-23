@@ -12,7 +12,6 @@ export class askAICommand{
                 prompt: this.prompt
             });
         }catch (error) {
-            console.log('h1');
             response.success = false;
         }
         return response;

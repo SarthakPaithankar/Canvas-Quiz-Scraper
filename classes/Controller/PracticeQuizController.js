@@ -55,7 +55,7 @@ export class PracticeQuizController {
         const action = "askAIText";
         const elements = quizBody.querySelectorAll(`.question`);
         let questions = [];
-        
+
         elements.forEach((element, i) => {
             const questionTextEl = element.querySelector(".questionText");
             if (questionTextEl) {
@@ -68,7 +68,7 @@ export class PracticeQuizController {
         const prompt = `
             You are a rigorous educational assistant specializing in generating high-quality, conceptual quiz questions. 
             TASK:
-            Generate exactly 2 questions based on the following text: ${questionText}. 
+            Generate exactly 10 questions based on the following text: ${questionText}. 
             The questions must promote a DEEPER understanding by focusing on the application and analysis of the concepts. Avoid simple recall.
 
             CONSTRAINTS:
@@ -89,7 +89,7 @@ export class PracticeQuizController {
             4. For "short_answer", set "opts" to null.
             5. For "mcq", ensure distractors (wrong answers) represent common student misconceptions.
             6. OUTPUT: Return ONLY the JSON object. No markdown blocks, no preamble, no postamble.
-            `
+        `
          
         const response = await this.askAI(action, prompt);
         

@@ -1,7 +1,6 @@
 export class KeyController{
-    constructor(){
-    }
-
+    constructor(){}
+    
     initEventListener(geminiWindow){
         console.log("setting listener");
         const keyWindowBody = geminiWindow.document.body;
