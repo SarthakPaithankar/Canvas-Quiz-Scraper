@@ -2,7 +2,7 @@
     "manifest_version": 3, 
     "name": "Canvas Quiz Scraper", 
     "version": "1.0", 
-    "permissions": ["scripting", "activeTab", "storage"], 
+    "permissions": ["scripting", "activeTab", "storage","downloads"], 
 
     "background": {
         "service_worker": "background.bundle.js", 
@@ -13,19 +13,20 @@
         "https://generativelanguage.googleapis.com/",
         "https://*.canvas.edu/*" 
     ],
-    "action": { "default_popup": "MainMenu.html" }, 
-    "content_scripts": [ { "matches": ["<all_urls>"], 
-    "js": ["popup.js"], "type": "module" } ], 
-    
+    "action": { 
+        "default_popup": "MainMenu.html" 
+    }, 
+    "content_scripts": [
+        { 
+            "matches": ["https://*.canvas.edu/*"], 
+            "js": ["popup.js"], "type": "module" 
+        } 
+    ], 
     "web_accessible_resources": [ 
-        { "resources": [ 
-            "classes/FormClasses/*.js", 
-            "classes/QuestionClasses/*.js", 
-            "classes/QuizClass/*.js",
-            "classes/Controller/*.js",
-            "classes/aiClass/*.js"
-        ], 
-        "matches": ["<all_urls>"] } 
+        { 
+            "resources": [ "classes/**/*.js"], 
+            "matches": ["<all_urls>"] 
+        } 
     ] 
 }
 

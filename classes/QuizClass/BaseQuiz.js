@@ -3,7 +3,6 @@ import {PracticeQuizController} from "../Controller/PracticeQuizController.js"
 export class QuizGenerator{
 
     constructor(QuestionFactory, FormBuilder){
-        console.log("Passed in Parent:", QuestionFactory);
         this.QuestionFactory = QuestionFactory;
         this.builder = FormBuilder;
     }

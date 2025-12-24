@@ -42,6 +42,13 @@ export class QuizAppController {
                 
                 const builderInstance = new FormBuilderModule.FormBuilder();
                 const factoryInstance = new QuestionFactoryModule.QuestionFactory();
+
+                const activeQuizFlag = document.getElementById("quiz-submission-version-table");
+
+                if(activeQuizFlag){
+                    alert("Uh-oh looks like you haven't finished your quiz yet!");
+                    return;
+                }
                 
                 if(type === "mcq"){
                     generatorClass = McqGeneratorImport.McqGenerator; 
