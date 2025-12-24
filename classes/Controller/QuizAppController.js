@@ -45,7 +45,7 @@ export class QuizAppController {
 
                 const activeQuizFlag = document.getElementById("quiz-submission-version-table");
 
-                if(activeQuizFlag){
+                if(!activeQuizFlag){
                     alert("Uh-oh looks like you haven't finished your quiz yet!");
                     return;
                 }

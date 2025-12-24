@@ -15,6 +15,7 @@ export class GeminiKeyPage{
                     <button class="set" type="button">Set</button>
                 </form>
                 <a href="${geminUrl}">Click here to get your Free Key</a>
+                <p>Your key is stored locally within Chrome and cleared when the extension is removed.</p>
             </html>
         `)
         geminiTab.document.close();

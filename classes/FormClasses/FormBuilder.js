@@ -16,7 +16,6 @@ export class FormBuilder {
 
   build() {
     return this.html + `
-        <a href="path_to_file" download="proposed_file_name">Download</a>
       </form>
     `;
   }
