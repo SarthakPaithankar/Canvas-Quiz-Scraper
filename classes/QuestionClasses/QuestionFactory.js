@@ -1,4 +1,3 @@
-//Factory Pattern
 import { MatchingQuestion } from "./MatchingQuestion.js";
 import { TextQuestion } from "./TextQuestion.js"
 import { MultipleChoiceQuestion } from "./MultipleChoiceQuestion.js"

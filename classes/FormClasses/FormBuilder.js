@@ -1,4 +1,3 @@
-//BUILDER PATTERN
 export class FormBuilder {
   constructor() {
     this.html = `<form id="myForm">`;
@@ -11,11 +10,6 @@ export class FormBuilder {
 
   addSimilarQuizButton(){
     this.html += `<button type="button" class="similar_quiz">Make a Similar Quiz</button>`;
-    return this;
-  }
-
-  revealAnswerButton(){
-    this.html += `<button type="button" class="reveal_answer">Make a Similar Quiz</button>`;
     return this;
   }
 

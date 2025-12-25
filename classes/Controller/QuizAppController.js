@@ -1,4 +1,3 @@
-//OBSERVER PATTERN
 export class QuizAppController {
     constructor(quizGeneratorClass, dependencies) {
         this.GeneratorClass = quizGeneratorClass;

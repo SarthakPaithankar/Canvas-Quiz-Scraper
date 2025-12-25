@@ -1,4 +1,3 @@
-//TEMPLATE PATTERN
 import {PracticeQuizController} from "../Controller/PracticeQuizController.js"
 export class QuizGenerator{
 
