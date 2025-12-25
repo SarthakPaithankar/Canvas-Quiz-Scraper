@@ -4,7 +4,7 @@
 
 - Retake **completed** quizzes
 - Recieve **AI hints** to solve questions
-- Generate **similar quizzes**
+- Generate **similar quizzes** with answer keys
 - Download **quizzes**
 - Only functional for **COMPLETED** quizes. ***No Cheating!***
 
@@ -18,6 +18,7 @@ Canvas quizzes are sometimes not able to be retaken due to permissions retracted
 Canvas Quiz Synthesizer abstracts away the manual process of rewriting quizzes by scraping questions and options for students. Students get options to extract questions by the questions' types(MCQ, Short Answer, All) and then can recieve AI hints to help solve problems if needed. They are also provided with the option to generate similar quizzes.
 ![Screenshot of Sample UI.](./imgs/SampleUI.png)
 ![Screenshot of Sample Retake Quiz.](./imgs/sampleRetakeQuiz.png)
+![Screenshot of Sample AI Generated Quiz](./imgs/SampleGeneratedQuiz.png)
 
 ## How do I use Canvas Quiz Synthesizer
 1. Download the extension from Git or chrome store
