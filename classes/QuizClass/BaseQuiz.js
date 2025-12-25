@@ -49,8 +49,9 @@ export class QuizGenerator{
 
     createQuizObjects(quizRaw){
         let quizObjects;
+        const explanation = null;
         quizObjects = quizRaw.map((q, i) =>
-            this.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src)
+            this.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src, explanation)
         );
         return quizObjects;
     }
@@ -92,6 +93,14 @@ export class QuizGenerator{
             aiDiv.innerHTML = `<strong>Error: ${response.error}</strong>`;
         }else{
             if (aiDiv) aiDiv.innerHTML = `<strong>Could not connect to AI service.</strong>`;
+        }
+    }
+
+    static formatError(response, aiDiv){
+        if(response.error){
+            aiDiv.innerHTML = `<strong>Error: ${response.error}</strong>`;
+        }else if(response.success == false){
+            aiDiv.innerHTML = `<strong>Error: Quiz Generation failed due to unknown error</strong>`;
         }
     }
 }

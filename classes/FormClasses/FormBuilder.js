@@ -14,6 +14,11 @@ export class FormBuilder {
     return this;
   }
 
+  revealAnswerButton(){
+    this.html += `<button type="button" class="reveal_answer">Make a Similar Quiz</button>`;
+    return this;
+  }
+
   build() {
     return this.html + `
       </form>

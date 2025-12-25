@@ -4,7 +4,6 @@ export class GeminiKeyPage{
         this.keyControllerObject = keyController;
     }
     createPage(){
-        console.log("creating page");
         const geminiTab = window.open("", "_blank");
         const geminUrl = "https://aistudio.google.com/welcome";
         geminiTab.document.write(`

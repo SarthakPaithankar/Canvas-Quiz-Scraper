@@ -1,7 +1,7 @@
 import { askAICommand } from "../aiClass/AITextCommand.js"
 import { inteligenceInvoker } from "../aiClass/InteligenceInvoker.js";
 import { QuizGenerator } from "../QuizClass/BaseQuiz.js"
-import { QuestionFactory as qfact } from "../QuestionClasses/QuestionFactory.js";
+import { QuestionFactory } from "../QuestionClasses/QuestionFactory.js";
 import { FormBuilder } from "../FormClasses/FormBuilder.js";
 
 export class PracticeQuizController {
@@ -13,15 +13,21 @@ export class PracticeQuizController {
         const quizBody = this.quizWindow.document.body;
 
         quizBody.addEventListener('click', (event) => {
-            if (event.target.classList.contains('ask-ai-button')) {
+            if(event.target.classList.contains('ask-ai-button')){
                 this.getAIHint(event.target);
             }
         });
 
         quizBody.addEventListener('click', (event) => {
-            if (event.target.classList.contains("similar_quiz")) {
-                this.createNewQuiz(quizBody);
+            if(event.target.classList.contains("similar_quiz")){
+                this.createNewQuiz(quizBody, event);
             }
+        })
+
+        quizBody.addEventListener('click', (event)=>{
+            if(event.target.classList.contains('reveal-answer')){
+                this.revealAnswer(event.target);
+            } 
         })
     }
 
@@ -50,7 +56,11 @@ export class PracticeQuizController {
         QuizGenerator.formatMessage(response, aiDiv)
     }
 
-    async createNewQuiz(quizBody) {
+    sleep(ms){
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async createNewQuiz(quizBody, event) {
         const { AIQuizGenerator } = await import("../QuizClass/AIGeneratedQuiz.js");
         const action = "askAIText";
         const elements = quizBody.querySelectorAll(`.question`);
@@ -77,24 +87,36 @@ export class PracticeQuizController {
             3. JSON Schema: You MUST return a JSON object with this exact structure:
             {
                 "quiz": [
-                {
-                    "q_text": "string",
-                    "opts": ["option A", "option B", "option C", "option D"],
-                    "ans": "string",
-                    "type": "mcq" | "text",
-                    "expl": "string"
-                }
+                    {
+                        "q_text": "string",
+                        "opts": ["option A", "option B", "option C", "option D"],
+                        "ans": "string",
+                        "type": "mcq" | "text",
+                        "expl": "string"
+                    }
                 ]
             }
             4. For "short_answer", set "opts" to null.
             5. For "mcq", ensure distractors (wrong answers) represent common student misconceptions.
-            6. OUTPUT: Return ONLY the JSON object. No markdown blocks, no preamble, no postamble.
+            6. For "expl", provide the answer and a 1-2 sentence explanation.
+            7. OUTPUT: Return ONLY the JSON object. No markdown blocks, no preamble, no postamble.
         `
-         
+
+        const button_div = this.quizWindow.document.body.getElementsByClassName("similar_quiz");
+        var aiDiv = QuizGenerator.createDiv(button_div[0], this.quizWindow);
         const response = await this.askAI(action, prompt);
-        
+        console.log(response);
+        QuizGenerator.formatError(response, aiDiv)
         const builder = new FormBuilder();
+        const qfact = new QuestionFactory();
         const generator = new AIQuizGenerator(qfact, builder, response);
         generator.generateQuiz();  
+    }
+
+    revealAnswer(element){
+        const questionId = element.dataset.questionId;
+        const questionContainer = this.quizWindow.document.getElementById(questionId);
+        const explanationContainer = questionContainer.getElementsByClassName("explanation");
+        explanationContainer[0].style.display = "block";
     }
 }

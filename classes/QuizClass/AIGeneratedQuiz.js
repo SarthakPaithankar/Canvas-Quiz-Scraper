@@ -24,7 +24,7 @@ export class AIQuizGenerator extends QuizGenerator{
     
     parse_questions(){
         const json_obj = this.parse_json();
-        const quizRaw = json_obj.map(question => {
+        const quizRaw = json_obj.quiz.map(question => {
             let options = [];
             if("opts" in question && question.opts){
                 Object.values(question.opts).forEach(value => {
@@ -39,7 +39,7 @@ export class AIQuizGenerator extends QuizGenerator{
     createQuizObjects(quizRaw){
         let quizObjects;
         quizObjects = quizRaw.map((q, i) => {
-            return this.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src);
+            return this.QuestionFactory.create(i, q.type, q.text, q.options, q.img_src, q.ans);
         });
         return quizObjects;
     }
